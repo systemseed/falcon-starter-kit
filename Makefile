@@ -72,20 +72,22 @@ drush:
 	$(call message,Executing \"drush -r web $(COMMAND_ARGS) --yes\")
 	$(call docker-www-data, php drush -r web $(COMMAND_ARGS) --yes)
 
+# TODO: CHANGE RELEASES BRANCH AFTER MERGE.
 prepare\:structure:
     # Generate frontend dir.
 	if [ ! -d "frontend" ]; then \
-		$(call message,$(PROJECT_NAME): Create frontend dir and download Falcon Default template.); \
-		mkdir frontend \
-		&& cd frontend \
-		&& git init \
-		&& git remote add origin -f https://github.com/systemseed/falcon.git \
-		&& git config core.sparseCheckout true \
-		&& echo /falconjs/templates/default >> .git/info/sparse-checkout \
-		&& git pull origin releases \
-		&& mv falconjs/templates/default/* . \
-		&& rm -rf falconjs \
-		&& rm -rf .git; \
+		mkdir frontend; \
+		cd frontend; \
+		git init; \
+		git remote add origin -f https://github.com/systemseed/falcon.git; \
+		git config core.sparseCheckout true; \
+		echo /falconjs/templates/default >> .git/info/sparse-checkout; \
+		git pull origin releases; \
+		mv falconjs/templates/default/* .; \
+		rm -rf falconjs; \
+		rm -rf .git; \
+		cd ..; \
+		sed -i '' -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json
 		sed -n '/ENVIRONMENT=/,1p' .env >> frontend/.env; \
 		sed -n '/FRONTEND_URL=/,1p' .env >> frontend/.env; \
 		sed -n '/BACKEND_URL=/,1p' .env >> frontend/.env; \
@@ -121,7 +123,7 @@ prepare:
 	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
 	docker-compose run --rm node yarn install
 
-install:
+install: | prepare
 	$(call message,$(PROJECT_NAME): Installing Drupal)
 	sleep 5
 	$(call docker-www-data, php drush -r web site-install falcon \
