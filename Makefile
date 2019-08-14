@@ -1,6 +1,6 @@
 # Define here list of available make commands.
-.PHONY: default pull up stop down clean exec exec\:wodby exec\:root drush \
-prepare install
+.PHONY: default pull up stop down exec exec\:wodby exec\:root drush \
+prepare prepare\:structure install
 
 # Create local environment files.
 $(shell cp -n \.\/\.docker\/docker-compose\.override\.default\.yml \.\/\.docker\/docker-compose\.override\.yml)
@@ -72,31 +72,62 @@ drush:
 	$(call message,Executing \"drush -r web $(COMMAND_ARGS) --yes\")
 	$(call docker-www-data, php drush -r web $(COMMAND_ARGS) --yes)
 
-prepare: | up
+prepare\:structure:
+    # Generate frontend dir.
+	if [ ! -d "frontend" ]; then \
+		$(call message,$(PROJECT_NAME): Create frontend dir and download Falcon Default template.); \
+		mkdir frontend \
+		&& cd frontend \
+		&& git init \
+		&& git remote add origin -f https://github.com/systemseed/falcon.git \
+		&& git config core.sparseCheckout true \
+		&& echo /falconjs/templates/default >> .git/info/sparse-checkout \
+		&& git pull origin releases \
+		&& mv falconjs/templates/default/* . \
+		&& rm -rf falconjs \
+		&& rm -rf .git; \
+		sed -n '/ENVIRONMENT=/,1p' .env >> frontend/.env; \
+		sed -n '/FRONTEND_URL=/,1p' .env >> frontend/.env; \
+		sed -n '/BACKEND_URL=/,1p' .env >> frontend/.env; \
+		sed -n '/CONSUMER_ID=/,1p' .env >> frontend/.env; \
+		sed -n '/PAYMENT_SECRET_HEADER_NAME=/,1p' .env >> frontend/.env; \
+		sed -n '/HTTP_AUTH_USER=/,1p' .env >> frontend/.env; \
+		sed -n '/#HTTP_AUTH_PASS=/,1p' .env >> frontend/.env; \
+	fi
+
+prepare:
+	@$(MAKE) -s prepare:structure
+	@$(MAKE) -s up
+
     # Prepare composer dependencies.
 	$(call message,$(PROJECT_NAME): Installing/updating composer dependencies)
 	-$(call docker-wodby, php composer install --no-suggest)
-
-	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
-	docker-compose run --rm node yarn install
 
     # Prepare public files folder.
 	$(call message,$(PROJECT_NAME): Preparing public files directory)
 	$(call docker-wodby, php mkdir -p web/sites/default/files)
 	$(call docker-root, php chown -R www-data: web/sites/default/files)
+
     # Prepare settings.php file.
 	$(call message,$(PROJECT_NAME): Making settings.php writable)
 	$(call docker-wodby, php chmod 666 web/sites/default/settings.php)
+	$(call docker-wodby, php chmod +w web/sites/default)
+	$(call docker-wodby, php cp web/sites/example.settings.local.php web/sites/default/settings.local.php)
+	$(call docker-wodby, php sed -i \"/settings.local.php';/s/# //g\" web/sites/default/settings.php)
 
-install: | prepare
+	# TODO: Copy file only if it does not exist. Copy from web/modules/contrib/falcon.
+	$(call docker-www-data, php curl -o web/sites/development.services.yml https://raw.githubusercontent.com/systemseed/falcon/releases/falcon/settings/development.services.yml)
+
+	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
+	docker-compose run --rm node yarn install
+
+install:
 	$(call message,$(PROJECT_NAME): Installing Drupal)
 	sleep 5
-    # TODO: Copy file only if it does not exist. Copy from web/modules/contrib/falcon;
-	$(call docker-www-data, php curl -o web/sites/development.services.yml https://raw.githubusercontent.com/systemseed/falcon/releases/falcon/settings/development.services.yml)
 	$(call docker-www-data, php drush -r web site-install falcon \
 		--db-url=mysql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST)/$(DB_NAME) --site-name=$(PROJECT_NAME) --account-pass=admin \
 		install_configure_form.enable_update_status_module=NULL --yes)
-	$(call message,Congratulations! You installed $(PROJECT_NAME)!)
+	$(call message,Falcon default template downloaded!$(PROJECT_NAME)!)
 
 yarn:
 	$(call message,$(PROJECT_NAME): Running Yarn)
@@ -106,3 +137,8 @@ yarn:
 logs:
 	$(call message,$(PROJECT_NAME): Streaming the Next.js application logs)
 	docker-compose logs -f node
+
+
+# https://stackoverflow.com/a/6273809/1826109
+%:
+	@:

@@ -1,0 +1,72 @@
+{
+  "name": "falcon/my_project",
+  "type": "project",
+  "config": {
+    "optimize-autoloader": true,
+    "process-timeout": 0,
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": {
+    "0": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    "1": {
+      "type": "vcs",
+      "url": "https://git.drupalcode.org/sandbox/duozersk-3005285.git"
+    },
+    "2": {
+      "type": "vcs",
+      "url": "git@github.com:systemseed/commerce_paypal_ec.git"
+    },
+    "3": {
+      "type": "vcs",
+      "url": "https://gitbox.apache.org/repos/asf/logging-log4php.git"
+    },
+    "rxp-remote-php": {
+      "type": "vcs",
+      "url": "https://github.com/systemseed/rxp-remote-php"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "composer drupal:scaffold"
+    ],
+    "post-update-cmd": [
+      "composer drupal:scaffold"
+    ]
+  },
+  "extra": {
+    "installer-paths": {
+      "web/core": [
+        "type:drupal-core"
+      ],
+      "web/modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "web/libraries/{$name}": [
+        "type:drupal-library"
+      ],
+      "web/profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "web/themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "drush/contrib/{$name}": [
+        "type:drupal-drush"
+      ]
+    },
+    "drupal-scaffold": {
+      "excludes": [
+        "sites/development.services.yml"
+      ]
+    },
+    "enable-patching": true
+  },
+  "require": {
+    "systemseed/falcon": "^1.0"
+  }
+}
