@@ -9,7 +9,7 @@ $(shell cp -n \.\/\.docker\/docker-compose\.override\.default\.yml \.\/\.docker\
 # Then if OS is Linux we change the PHP_TAG:
 #  - uncomment all the strings containing 'PHP_TAG'
 #  - comment all the strings containing 'PHP_TAG' and '-dev-macos-'
-$(shell ! test -e \.env && cp \.env\.default \.env && cp \.env\.default && uname -s | grep -q 'Linux' && sed -i '/PHP_TAG/s/^# //g' \.env && sed -i -E '/PHP_TAG.+-dev-macos-/s/^/# /g' \.env)
+$(shell ! test -e \.env && cp \.env\.default \.env && uname -s | grep -q 'Linux' && sed -i '/PHP_TAG/s/^# //g' \.env && sed -i -E '/PHP_TAG.+-dev-macos-/s/^/# /g' \.env)
 
 include .env
 
