@@ -87,7 +87,7 @@ prepare\:structure:
 		rm -rf falconjs; \
 		rm -rf .git; \
 		cd ..; \
-		sed -i '' -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json
+		sed -i '' -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json; \
 		sed -n '/ENVIRONMENT=/,1p' .env >> frontend/.env; \
 		sed -n '/FRONTEND_URL=/,1p' .env >> frontend/.env; \
 		sed -n '/BACKEND_URL=/,1p' .env >> frontend/.env; \
@@ -117,7 +117,7 @@ prepare:
 	$(call docker-wodby, php cp web/sites/example.settings.local.php web/sites/default/settings.local.php)
 	$(call docker-wodby, php sed -i \"/settings.local.php';/s/# //g\" web/sites/default/settings.php)
 
-	# TODO: Copy file only if it does not exist. Copy from web/modules/contrib/falcon.
+    # TODO: Copy file only if it does not exist. Copy from web/profile/contrib/falcon/settings.
 	$(call docker-www-data, php curl -o web/sites/development.services.yml https://raw.githubusercontent.com/systemseed/falcon/releases/falcon/settings/development.services.yml)
 
 	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
