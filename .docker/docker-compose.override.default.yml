@@ -4,7 +4,11 @@ services:
 
   node:
     volumes:
-      - ../frontend:/fronend:cached
+      - ../frontend:/frontend:cached
+
+  mariadb:
+    volumes:
+      - ./mysql/drupal:/var/lib/mysql:cached
 
   php:
     environment:

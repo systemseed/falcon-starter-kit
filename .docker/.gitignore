@@ -1,2 +1,4 @@
 # Environment overrides.
 /docker-compose.override.yml
+
+/mysql
