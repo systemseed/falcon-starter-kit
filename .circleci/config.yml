@@ -11,6 +11,10 @@ jobs:
       - checkout
 
       - run:
+          name: Prepare structure of the project
+          command: make prepare:structure
+
+      - run:
           name: Fix CircleCI files permissons
           command: |
             sudo chown ubuntu:ubuntu -R *
@@ -19,7 +23,6 @@ jobs:
       - run:
           name: Install Falcon distribution
           command: make install
-          no_output_timeout: 20m
 
       - run:
           name: Add Falcon hosts into /etc/hosts
@@ -31,10 +34,10 @@ jobs:
           name: Make a simple check that the backend is ready and showing the log in form
           command: docker-compose run --rm php curl http://admin.docker.localhost | grep "Log in"
 
-      - run:
-          name: Make a simple check that the frontend is ready and showing the log in form
-          # TODO
-          command: docker-compose run --rm php curl http://frontnend.docker.localhost | grep "Log in"
+      #- run:
+      #    name: Make a simple check that the frontend is ready and showing the log in form
+      #    # TODO
+      #    command: docker-compose run --rm php curl http://frontnend.docker.localhost | grep "Log in"
 
 
 workflows:
