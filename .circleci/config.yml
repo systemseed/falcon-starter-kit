@@ -32,13 +32,11 @@ jobs:
 
       - run:
           name: Make a simple check that the backend is ready and showing the log in form
-          command: docker-compose run --rm php curl http://admin.docker.localhost | grep "Log in"
+          command: curl http://admin.docker.localhost | grep "Log in"
 
-      #- run:
-      #    name: Make a simple check that the frontend is ready and showing the log in form
-      #    # TODO
-      #    command: docker-compose run --rm php curl http://frontnend.docker.localhost | grep "Log in"
-
+      - run:
+          name: Make a simple check that the frontend is ready and showing the log in form
+          command: curl http://frontend.docker.localhost | grep "Falcon Frontend Application"
 
 workflows:
   version: 2
