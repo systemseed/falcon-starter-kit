@@ -10,7 +10,7 @@ The repository provides an easy way to spin up the whole infrastructure and inst
  - [Docker Compose](https://docs.docker.com/compose/install)
  - [GNU Make](https://www.gnu.org/software/make) - comes with most MacOS & Linux systems out of the box
 
-## How start:
+## How to start:
 
 Clone the repository and run `make install` command in the root of the project. That's it. Simple. Cool. We know!
 
