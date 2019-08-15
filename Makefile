@@ -117,8 +117,8 @@ prepare:
 	$(call docker-wodby, php cp web/sites/example.settings.local.php web/sites/default/settings.local.php)
 	$(call docker-wodby, php sed -i \"/settings.local.php';/s/# //g\" web/sites/default/settings.php)
 
-    # TODO: Copy file only if it does not exist. Copy from web/profile/contrib/falcon/settings.
-	$(call docker-www-data, php curl -o web/sites/development.services.yml https://raw.githubusercontent.com/systemseed/falcon/releases/falcon/settings/development.services.yml)
+    # Copy default development.service.yml from falcon profile.
+	$(call docker-wodby, php cp web/profiles/contrib/falcon/settings/development.services.yml web/sites/development.services.yml)
 
 	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
 	docker-compose run --rm node yarn install
