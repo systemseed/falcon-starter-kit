@@ -9,7 +9,3 @@
 
 # Composer dependencies.
 /backend/vendor
-
-# Locally built site.
-/backend/web
-

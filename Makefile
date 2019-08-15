@@ -87,7 +87,7 @@ prepare\:structure:
 		rm -rf falconjs; \
 		rm -rf .git; \
 		cd ..; \
-		sed -i '' -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json; \
+		sed -i -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json; \
 		sed -n '/ENVIRONMENT=/,1p' .env >> frontend/.env; \
 		sed -n '/FRONTEND_URL=/,1p' .env >> frontend/.env; \
 		sed -n '/BACKEND_URL=/,1p' .env >> frontend/.env; \
@@ -99,10 +99,14 @@ prepare\:structure:
 
 prepare:
 	@$(MAKE) -s prepare:structure
+
+	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
+	docker-compose run --rm node yarn install
+
 	@$(MAKE) -s up
 
     # Prepare composer dependencies.
-	$(call message,$(PROJECT_NAME): Installing/updating composer dependencies)
+	$(call message,$(PROJECT_NAME): Installing composer dependencies)
 	-$(call docker-wodby, php composer install --no-suggest)
 
     # Prepare public files folder.
@@ -120,16 +124,12 @@ prepare:
     # Copy default development.service.yml from falcon profile.
 	$(call docker-wodby, php cp web/profiles/contrib/falcon/settings/development.services.yml web/sites/development.services.yml)
 
-	$(call message,$(PROJECT_NAME): Installing dependencies for React.js application)
-	docker-compose run --rm node yarn install
-
 install: | prepare
 	$(call message,$(PROJECT_NAME): Installing Drupal)
-	sleep 5
 	$(call docker-www-data, php drush -r web site-install falcon \
 		--db-url=mysql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST)/$(DB_NAME) --site-name=$(PROJECT_NAME) --account-pass=admin \
 		install_configure_form.enable_update_status_module=NULL --yes)
-	$(call message,Installation completed!$(PROJECT_NAME)!)
+	$(call message,$(PROJECT_NAME): Installation successfully completed. Visit README.md to find the project URLs.)
 
 yarn:
 	$(call message,$(PROJECT_NAME): Running Yarn)

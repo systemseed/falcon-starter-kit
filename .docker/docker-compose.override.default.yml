@@ -1,4 +1,4 @@
-version: '2'
+version: "3"
 
 services:
 
@@ -8,11 +8,10 @@ services:
 
   mariadb:
     volumes:
-      - ./mysql/drupal:/var/lib/mysql:cached
+      - ./mysql:/var/lib/mysql:cached
 
   php:
     environment:
-      TEST_USERS_PASSWORD: ${TEST_USERS_PASSWORD}
       ENVIRONMENT: ${ENVIRONMENT}
 #      PHP_XDEBUG: 1
 #      PHP_XDEBUG_DEFAULT_ENABLE: 1

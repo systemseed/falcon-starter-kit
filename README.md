@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/systemseed/falcon-starter-kit.svg?style=svg)](https://circleci.com/gh/systemseed/falcon-starter-kit)
+
 # Falcon Starter Kit
 
 The repository provides an easy way to spin up the whole infrastructure and install [Falcon](https://systemseed.com/products/falcon) project with the default theme. It helps to begin developing your own projects based on [Falcon](https://systemseed.com/products/falcon) faster.
@@ -14,10 +16,10 @@ Clone the repository and run `make install` command in the root of the project. 
 
 #### Access the project
  
-| URL                                     | Name     |
-| ----------------------------------------| -------- |
-| http://app.docker.localhost             | Frontend |
-| http://falcon.docker.localhost          | Backend  |
+| URL                                    | Name     |
+| ---------------------------------------| -------- |
+| http://frontend.docker.localhost       | Frontend |
+| http://admin.docker.localhost          | Backend  |
 
 
 #### Command list

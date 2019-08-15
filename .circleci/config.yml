@@ -1,0 +1,46 @@
+version: 2
+
+jobs:
+  build_and_test:
+
+    machine:
+      enabled: true
+      image: ubuntu-1604:201903-01
+
+    steps:
+      - checkout
+
+      - run:
+          name: Prepare structure of the project
+          command: make prepare:structure
+
+      - run:
+          name: Fix CircleCI files permissons
+          command: |
+            sudo chown ubuntu:ubuntu -R *
+            sudo chown ubuntu:ubuntu -R .[!.]*
+
+      - run:
+          name: Install Falcon distribution
+          command: make install
+
+      - run:
+          name: Add Falcon hosts into /etc/hosts
+          command: |
+            echo 127.0.0.1 frontend.docker.localhost | sudo tee -a /etc/hosts
+            echo 127.0.0.1 admin.docker.localhost | sudo tee -a /etc/hosts
+
+      - run:
+          name: Make a simple check that the backend is ready and showing the log in form
+          command: curl http://admin.docker.localhost | grep "Log in"
+
+      - run:
+          name: Make a simple check that the frontend is ready and showing the log in form
+          command: curl http://frontend.docker.localhost | grep "Falcon Frontend Application"
+
+workflows:
+  version: 2
+
+  build_and_test:
+    jobs:
+      - build_and_test
