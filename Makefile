@@ -87,7 +87,7 @@ prepare\:structure:
 		rm -rf falconjs; \
 		rm -rf .git; \
 		cd ..; \
-		sed -i '' -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json; \
+		sed -i -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json; \
 		sed -n '/ENVIRONMENT=/,1p' .env >> frontend/.env; \
 		sed -n '/FRONTEND_URL=/,1p' .env >> frontend/.env; \
 		sed -n '/BACKEND_URL=/,1p' .env >> frontend/.env; \
