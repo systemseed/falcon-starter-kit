@@ -1,4 +1,4 @@
-version: '2'
+version: 3
 
 services:
 
@@ -8,7 +8,7 @@ services:
 
   mariadb:
     volumes:
-      - ./mysql/drupal:/var/lib/mysql:cached
+      - ./mysql:/var/lib/mysql:cached
 
   php:
     environment:

@@ -14,10 +14,10 @@ Clone the repository and run `make install` command in the root of the project. 
 
 #### Access the project
  
-| URL                                     | Name     |
-| ----------------------------------------| -------- |
-| http://app.docker.localhost             | Frontend |
-| http://falcon.docker.localhost          | Backend  |
+| URL                                    | Name     |
+| ---------------------------------------| -------- |
+| http://frontend.docker.localhost       | Frontend |
+| http://admin.docker.localhost          | Backend  |
 
 
 #### Command list
