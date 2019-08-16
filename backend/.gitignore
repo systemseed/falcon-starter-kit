@@ -1,0 +1,8 @@
+# Directories with packages managed by composer.
+/vendor
+/web/core
+/web/modules/contrib
+/web/profiles/contrib
+
+# Drupal files directory.
+/web/sites/default/files

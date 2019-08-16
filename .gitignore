@@ -5,7 +5,4 @@
 .DS_Store
 
 # Environment overrides.
-/.env
-
-# Composer dependencies.
-/backend/vendor
+.env

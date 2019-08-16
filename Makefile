@@ -72,7 +72,6 @@ drush:
 	$(call message,Executing \"drush -r web $(COMMAND_ARGS) --yes\")
 	$(call docker-www-data, php drush -r web $(COMMAND_ARGS) --yes)
 
-# TODO: CHANGE RELEASES BRANCH AFTER MERGE.
 prepare\:structure:
     # Generate frontend dir.
 	if [ ! -d "frontend" ]; then \
@@ -82,19 +81,12 @@ prepare\:structure:
 		git remote add origin -f https://github.com/systemseed/falcon.git; \
 		git config core.sparseCheckout true; \
 		echo /falconjs/templates/default >> .git/info/sparse-checkout; \
-		git pull origin releases; \
-		mv falconjs/templates/default/* .; \
+		git pull origin master; \
+		mv falconjs/templates/default/{.,}* .; \
 		rm -rf falconjs; \
 		rm -rf .git; \
+		sed -i.bak -e 's#"@systemseed/falcon": "0.0.0-semantic-release",#"@systemseed/falcon": "^1.0",#g' package\.json && rm -rf package.json.bak; \
 		cd ..; \
-		sed -i -E 's#"@systemseed/falcon":.*#"@systemseed/falcon": "^1.0",#g' \./\frontend\/package\.json; \
-		sed -n '/ENVIRONMENT=/,1p' .env >> frontend/.env; \
-		sed -n '/FRONTEND_URL=/,1p' .env >> frontend/.env; \
-		sed -n '/BACKEND_URL=/,1p' .env >> frontend/.env; \
-		sed -n '/CONSUMER_ID=/,1p' .env >> frontend/.env; \
-		sed -n '/PAYMENT_SECRET_HEADER_NAME=/,1p' .env >> frontend/.env; \
-		sed -n '/HTTP_AUTH_USER=/,1p' .env >> frontend/.env; \
-		sed -n '/#HTTP_AUTH_PASS=/,1p' .env >> frontend/.env; \
 	fi
 
 prepare:

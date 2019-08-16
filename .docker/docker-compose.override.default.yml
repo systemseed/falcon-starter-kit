@@ -11,8 +11,7 @@ services:
       - ./mysql:/var/lib/mysql:cached
 
   php:
-    environment:
-      ENVIRONMENT: ${ENVIRONMENT}
+#    environment:
 #      PHP_XDEBUG: 1
 #      PHP_XDEBUG_DEFAULT_ENABLE: 1
 #      PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
