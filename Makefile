@@ -82,7 +82,8 @@ prepare\:structure:
 		git config core.sparseCheckout true; \
 		echo /falconjs/templates/default >> .git/info/sparse-checkout; \
 		git pull origin master; \
-		mv falconjs/templates/default/{.,}* .; \
+		mv falconjs/templates/default/* .; \
+		mv falconjs/templates/default/.* .; \
 		rm -rf falconjs; \
 		rm -rf .git; \
 		sed -i.bak -e 's#"@systemseed/falcon": "0.0.0-semantic-release",#"@systemseed/falcon": "^1.0",#g' package\.json && rm -rf package.json.bak; \
