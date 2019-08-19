@@ -35,7 +35,7 @@ jobs:
           command: curl http://admin.docker.localhost | grep "Log in"
 
       - run:
-          name: Make a simple check that the frontend is ready and showing the log in form
+          name: Make a simple check that the frontend is ready and showing the page title
           command: curl http://frontend.docker.localhost | grep "Falcon Frontend Application"
 
 workflows:
