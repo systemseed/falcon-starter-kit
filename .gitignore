@@ -5,11 +5,4 @@
 .DS_Store
 
 # Environment overrides.
-/.env
-
-# Composer dependencies.
-/backend/vendor
-
-# Frontend generated folders.
-/frontend/.next
-/frontend/node_modules
+.env
