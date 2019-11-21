@@ -36,7 +36,7 @@ jobs:
 
       - run:
           name: Make a simple check that the frontend is ready and showing the page title
-          command: curl http://frontend.docker.localhost | grep "Falcon Frontend Application"
+          command: curl http://frontend.docker.localhost | grep "Home | Falcon"
 
 workflows:
   version: 2
